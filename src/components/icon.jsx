@@ -19,7 +19,8 @@ export const JsIcon = () => (
   </svg>
 );
 export const Pinned = () => (
-<svg width="123" height="123" viewBox="0 0 123 123" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg    width="20" 
+    height="20"  viewBox="0 0 123 123" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_44_13)">
 <path fill-rule="evenodd" clip-rule="evenodd" d="M121.21 36.53L85.92 1.23002C82.92 -1.76998 78.15 1.33002 76.72 3.97002C76.48 4.42002 76.91 4.83002 76.52 7.89002C76.0936 11.7628 75.1797 15.5663 73.8 19.21L58.11 34.91C51.84 41.17 42.88 38.39 35.24 34.59C33.62 33.79 31.55 32.02 29.76 33.81L23.12 40.45C22.8875 40.6814 22.703 40.9564 22.5771 41.2593C22.4512 41.5622 22.3864 41.887 22.3864 42.215C22.3864 42.543 22.4512 42.8678 22.5771 43.1707C22.703 43.4736 22.8875 43.7486 23.12 43.98L78.9 99.76C79.3686 100.227 80.0033 100.489 80.665 100.489C81.3267 100.489 81.9614 100.227 82.43 99.76L89.07 93.12C90.84 91.35 88.58 89.06 87.66 87.12C84.26 80.12 81.21 70.71 86.88 65.04L103.27 48.65C106.989 47.5324 110.782 46.6737 114.62 46.08C117.71 45.59 118.09 45.97 118.53 45.68C121.24 43.94 124.23 39.53 121.21 36.51V36.53Z" fill="#2470BD"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M53.48 82.1099L40.77 69.3999L0 120.96L1.92 122.88L53.48 82.1099Z" fill="#1A1A1A"/>
@@ -34,7 +35,8 @@ export const Pinned = () => (
 );
 
 export const Minecraftd = () => {
-<svg width="260" height="260" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg    width="20" 
+    height="20"  viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_44_32)">
 <path d="M0 0H260V260H0V0Z" fill="#52A535"/>
 <path d="M52 52V59.8H104V52H52ZM156 52V59.8H208V52H156ZM104 104V111.8H156V104H104ZM78 130V137.8H104V130H78ZM156 130V137.8H182V130H156Z" fill="#2A641C"/>
@@ -51,7 +53,8 @@ export const Minecraftd = () => {
 
 export const Atom = () => (
 
-<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg    width="20" 
+    height="20"  viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
 <circle cx="20" cy="20" r="20" fill="url(#paint0_linear_25_32)"/>
 <line x1="18" y1="7" x2="18" y2="19" stroke="#FFCC00" stroke-width="2"/>
 <line x1="23" y1="21" x2="23" y2="33" stroke="#FFE100" stroke-width="2"/>
@@ -69,7 +72,8 @@ export const Atom = () => (
 );
 
 export const Warning = () => (
-<svg width="212" height="192" viewBox="0 0 212 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg    width="20" 
+    height="20"  viewBox="0 0 212 192" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_44_9)">
 <path d="M4.05426 145.321L78.1309 17.5563L78.4242 17.0915C81.4758 12.1021 85.6005 7.85155 90.5 4.64724C95.1944 1.63616 100.652 0.023968 106.233 0C111.809 0.000877101 117.267 1.60865 121.949 4.63003C126.859 7.84331 130.985 12.1132 134.025 17.126C134.249 17.4874 134.456 17.8489 134.646 18.2275L207.515 144.46L207.912 145.218C210.654 150.656 212.056 156.669 212 162.757C211.973 167.782 210.692 172.721 208.274 177.129C205.542 182.053 201.364 186.023 196.302 188.506L195.301 188.953C190.346 191.089 184.981 192.112 179.585 191.948H30.3968C30.0001 191.948 29.6378 191.948 29.2583 191.948C25.6043 191.919 21.9839 191.249 18.5625 189.969C13.1264 187.913 8.45371 184.243 5.17559 179.452C1.88174 174.574 0.0833694 168.845 0.000228056 162.963C-0.0849372 157.821 0.835018 152.711 2.70867 147.92C3.06073 147.01 3.50586 146.139 4.03701 145.321H4.05426Z" fill="#B71616"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M15.5261 152.774L89.965 24.3723C98.9874 10.1724 113.306 9.81097 122.518 24.3723L195.732 151.225C201.563 162.946 198.665 178.764 179.62 178.368H30.3966C17.855 178.678 9.69518 167.714 15.4916 152.774H15.5261Z" fill="#E21B1B"/>
@@ -146,34 +150,36 @@ export const KotlinIcon = () => (
 );
 
 // Экспорт всех иконок как объект
+
+// Правильный экспорт всех иконок
 export const customIcons = {
-  fire: {
-    component: FireIcon,
-    keyword: '[fire]'
-  },
-  Pinned:{
+  // Обязательно lowercase ключи!
+  pinned: {
     component: Pinned,
     keyword: '[pinned]'
   },
-    Atom:{
+  atom: {
     component: Atom,
     keyword: '[atom]'
   },
-
-   Warning:{
+  warning: {
     component: Warning,
-    keyword: '[waring]'
+    keyword: '[warning]'
   },
   js: {
     component: JsIcon,
     keyword: '[js]'
   },
+  kotlin: {
+    component: KotlinIcon,
+    keyword: '[kotlin]'
+  },
   cplus: {
     component: CPlusIcon,
     keyword: '[cplus]'
   },
-  kotlin: {
-    component: KotlinIcon,
-    keyword: '[kotlin]'
+  fire: {
+    component: FireIcon,
+    keyword: '[fire]'
   }
 };
