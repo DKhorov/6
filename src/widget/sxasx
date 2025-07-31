@@ -1,0 +1,414 @@
+import React, { useEffect, useState, useRef } from 'react';
+import { Box, Button, Typography } from '@mui/material';
+import axios from '../system/axios';
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+
+const fadeInStyle = {
+  opacity: 1,
+  transform: 'translateY(0)',
+  transition: 'opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1)',
+};
+const fadeOutStyle = {
+  opacity: 0,
+  transform: 'translateY(40px)',
+};
+
+function ThrowErrorButton() {
+  const [error, setError] = useState(false);
+  if (error) {
+    throw new Error('Это кастомная ошибка!');
+  }
+  return (
+    <button
+      onClick={() => setError(true)}
+      style={{
+        margin: 20,
+        padding: 10,
+        background: '#b71c1c',
+        color: 'white',
+        border: 'none',
+        borderRadius: 5,
+        fontWeight: 'bold',
+        fontFamily: 'JetBrains Mono, monospace',
+        fontSize: 16,
+        cursor: 'pointer',
+      }}
+    >
+      Вызвать ошибку
+    </button>
+  );
+}
+
+const WidgetMain = React.memo(() => {
+  const [count, setCount] = useState(null);
+  const [mounted, setMounted] = useState(false);
+  const mountedRef = useRef(false);
+  const [noth, setnoth] = useState(null);
+
+  useEffect(() => {
+    axios.get('/postNumbers')
+      .then(res => setCount(res.data.posts))
+      .catch(err => console.error('Ошибка при получении данных:', err));
+    // Плавное появление
+    mountedRef.current = true;
+    setTimeout(() => setMounted(true), 50);
+    return () => { mountedRef.current = false; };
+  }, []);
+
+  useEffect(() => {
+    const fetchNotifications = () => {
+      axios.get('/notifications')
+        .then(res => setnoth(res.data))
+        .catch(err => console.error('Ошибка при получении уведомлений:', err));
+    };
+    fetchNotifications();
+    const handler = () => fetchNotifications();
+    window.addEventListener('refresh-notifications', handler);
+    return () => window.removeEventListener('refresh-notifications', handler);
+  }, []);
+
+  const handleClearNotifications = async () => {
+    try {
+      await axios.post('/auth/clear-notifications');
+      setnoth([]);
+    } catch (err) {
+      alert('Ошибка при очистке уведомлений');
+    }
+  };
+
+  // Карточки для отображения (для оптимизации)
+  const cards = [
+    {
+      label: 'Постов',
+      value: count,
+      bg: 'linear-gradient(135deg, rgb(221, 221, 221), rgb(227, 207, 103))',
+      ml: '15px',
+      mr: undefined,
+    },
+    {
+      label: 'Каналов',
+      value: 2,
+      bg: 'linear-gradient(135deg, rgb(221, 221, 221), rgb(103, 227, 183))',
+      ml: undefined,
+      mr: '15px',
+    },
+    {
+      label: 'В сети',
+      value: 8,
+      bg: 'linear-gradient(135deg, rgb(221, 221, 221), rgb(181, 103, 227))',
+      ml: '15px',
+      mr: undefined,
+    },
+    {
+      label: 'Версия',
+      value: '---',
+      bg: 'linear-gradient(135deg, rgb(221, 221, 221), rgb(227, 147, 103))',
+      ml: undefined,
+      mr: '15px',
+    },
+  ];
+
+  return (
+    <Box
+      sx={{
+        width: '280px',
+        minWidth: '280px',
+        height: '100%',
+        position: 'relative',
+        ...(!mounted ? fadeOutStyle : fadeInStyle),
+      }}
+    >
+      {/* Верхняя кнопка */}
+      <Box
+        sx={{
+          width: '100%',
+          height: '50px',
+          marginTop: '20px',
+          borderRadius: '100px',
+          alignItems: 'center',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          opacity: mounted ? 1 : 0,
+          transform: mounted ? 'translateY(0)' : 'translateY(-20px)',
+          transition: 'opacity 0.7s, transform 0.7s',
+        }}
+      >
+         <Button
+          sx={{
+            border: 'solid black 2px',
+            borderRadius: '100px',
+            paddingLeft: '25px',
+            paddingRight: '25px',
+            color: 'black',
+            textTransform: 'none',
+            marginRight: '15px',
+            fontWeight: 'bold',
+            fontFamily: "'JetBrains Mono', monospace",
+            boxShadow: 1,
+            transition: 'box-shadow 0.3s, transform 0.3s',
+            '&:hover': {
+              boxShadow: 8,
+              transform: 'scale(1.07)',
+              background: 'rgba(0,0,0,0.04)',
+            },
+          }}
+        >
+          AI Chat
+        </Button>
+        <Button
+          sx={{
+            border: 'solid black 2px',
+            borderRadius: '100px',
+            paddingLeft: '25px',
+            paddingRight: '25px',
+            color: 'black',
+            textTransform: 'none',
+            marginRight: '15px',
+            fontWeight: 'bold',
+            fontFamily: "'JetBrains Mono', monospace",
+            boxShadow: 1,
+            transition: 'box-shadow 0.3s, transform 0.3s',
+            '&:hover': {
+              boxShadow: 8,
+              transform: 'scale(1.07)',
+              background: 'rgba(0,0,0,0.04)',
+            },
+          }}
+        >
+          AI Chat
+        </Button>
+      </Box>
+
+      {/* Карточки */}
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 2,
+          mt: 1.4,
+          mb: 2,
+          width: '100%',
+        }}
+      >
+        {/* SVG с числом постов */}
+        <Box
+          sx={{
+            width: '130px',
+            height: '120px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: 2,
+            marginLeft: '15px',
+           
+          }}
+        >
+          <svg style={{width:'130px',}} viewBox="0 0 127 126" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g filter="url(#filter0_d_795_261)">
+              <rect x="6.83203" y="6" width="113.842" height="113.842" rx="15" fill="#942020"/>
+            </g>
+            <path d="M4 88H121V105C121 113.284 114.284 120 106 120H19C10.7157 120 4 113.284 4 105V88Z" fill="white" fillOpacity="0.12"/>
+            <path d="M29.0407 24.3227H25.1067V32.6667H22.9927V22.9367H31.1547V32.6667H29.0407V24.3227ZM37.5778 32.8067C36.8872 32.8067 36.2432 32.6994 35.6458 32.4847C35.0485 32.27 34.5258 31.9574 34.0778 31.5467C33.6392 31.1267 33.2938 30.6087 33.0418 29.9927C32.7898 29.3674 32.6638 28.6487 32.6638 27.8367C32.6638 27.0247 32.7898 26.306 33.0418 25.6807C33.2938 25.0554 33.6392 24.5327 34.0778 24.1127C34.5258 23.6834 35.0485 23.3614 35.6458 23.1467C36.2432 22.9227 36.8872 22.8107 37.5778 22.8107C38.2592 22.8107 38.8985 22.918 39.4958 23.1327C40.1025 23.338 40.6252 23.6507 41.0638 24.0707C41.5118 24.4907 41.8618 25.0087 42.1138 25.6247C42.3752 26.2407 42.5058 26.9547 42.5058 27.7667C42.5058 28.5787 42.3752 29.2974 42.1138 29.9227C41.8618 30.548 41.5118 31.0754 41.0638 31.5047C40.6252 31.934 40.1025 32.2607 39.4958 32.4847C38.8985 32.6994 38.2592 32.8067 37.5778 32.8067ZM37.5778 31.3787C37.9605 31.3787 38.3152 31.318 38.6418 31.1967C38.9685 31.066 39.2485 30.8607 39.4818 30.5807C39.7245 30.3007 39.9112 29.9367 40.0418 29.4887C40.1818 29.0314 40.2518 28.4714 40.2518 27.8087C40.2518 27.1554 40.1818 26.6 40.0418 26.1427C39.9112 25.6854 39.7245 25.3167 39.4818 25.0367C39.2485 24.7567 38.9685 24.556 38.6418 24.4347C38.3152 24.304 37.9605 24.2387 37.5778 24.2387C37.1858 24.2387 36.8265 24.304 36.4998 24.4347C36.1825 24.556 35.9025 24.7567 35.6598 25.0367C35.4265 25.3167 35.2445 25.6854 35.1138 26.1427C34.9832 26.6 34.9178 27.1554 34.9178 27.8087C34.9178 28.4714 34.9832 29.0314 35.1138 29.4887C35.2445 29.9367 35.4265 30.3007 35.6598 30.5807C35.9025 30.8607 36.1825 31.066 36.4998 31.1967C36.8265 31.318 37.1858 31.3787 37.5778 31.3787ZM48.64 32.8067C47.9027 32.8067 47.226 32.6947 46.61 32.4707C46.0034 32.2374 45.4807 31.9107 45.042 31.4907C44.6034 31.0614 44.2627 30.5387 44.02 29.9227C43.7774 29.2974 43.656 28.5927 43.656 27.8087C43.656 27.0247 43.7727 26.3247 44.006 25.7087C44.2487 25.0834 44.5847 24.5607 45.014 24.1407C45.4434 23.7114 45.9614 23.3847 46.568 23.1607C47.1747 22.9274 47.8514 22.8107 48.598 22.8107C49.214 22.8107 49.7507 22.8667 50.208 22.9787C50.6654 23.0907 51.0154 23.2307 51.258 23.3987L51.02 25.0507C50.74 24.8547 50.4087 24.682 50.026 24.5327C49.6527 24.3834 49.2327 24.3087 48.766 24.3087C47.8327 24.3087 47.1234 24.6074 46.638 25.2047C46.1527 25.802 45.91 26.67 45.91 27.8087C45.91 30.142 46.8854 31.3087 48.836 31.3087C49.2654 31.3087 49.648 31.2574 49.984 31.1547C50.32 31.0427 50.6327 30.884 50.922 30.6787L51.384 32.1067C51.132 32.284 50.7774 32.4474 50.32 32.5967C49.8627 32.7367 49.3027 32.8067 48.64 32.8067ZM57.808 24.3227V32.6667H55.624V24.3227H52.894V22.9367H60.552V24.3227H57.808ZM66.2204 32.8067C65.5298 32.8067 64.8858 32.6994 64.2884 32.4847C63.6911 32.27 63.1684 31.9574 62.7204 31.5467C62.2818 31.1267 61.9364 30.6087 61.6844 29.9927C61.4324 29.3674 61.3064 28.6487 61.3064 27.8367C61.3064 27.0247 61.4324 26.306 61.6844 25.6807C61.9364 25.0554 62.2818 24.5327 62.7204 24.1127C63.1684 23.6834 63.6911 23.3614 64.2884 23.1467C64.8858 22.9227 65.5298 22.8107 66.2204 22.8107C66.9018 22.8107 67.5411 22.918 68.1384 23.1327C68.7451 23.338 69.2678 23.6507 69.7064 24.0707C70.1544 24.4907 70.5044 25.0087 70.7564 25.6247C71.0178 26.2407 71.1484 26.9547 71.1484 27.7667C71.1484 28.5787 71.0178 29.2974 70.7564 29.9227C70.5044 30.548 70.1544 31.0754 69.7064 31.5047C69.2678 31.934 68.7451 32.2607 68.1384 32.4847C67.5411 32.6994 66.9018 32.8067 66.2204 32.8067ZM66.2204 31.3787C66.6031 31.3787 66.9578 31.318 67.2844 31.1967C67.6111 31.066 67.8911 30.8607 68.1244 30.5807C68.3671 30.3007 68.5538 29.9367 68.6844 29.4887C68.8244 29.0314 68.8944 28.4714 68.8944 27.8087C68.8944 27.1554 68.8244 26.6 68.6844 26.1427C68.5538 25.6854 68.3671 25.3167 68.1244 25.0367C67.8911 24.7567 67.6111 24.556 67.2844 24.4347C66.9578 24.304 66.6031 24.2387 66.2204 24.2387C65.8284 24.2387 65.4691 24.304 65.1424 24.4347C64.8251 24.556 64.5451 24.7567 64.3024 25.0367C64.0691 25.3167 63.8871 25.6854 63.7564 26.1427C63.6258 26.6 63.5604 27.1554 63.5604 27.8087C63.5604 28.4714 63.6258 29.0314 63.7564 29.4887C63.8871 29.9367 64.0691 30.3007 64.3024 30.5807C64.5451 30.8607 64.8251 31.066 65.1424 31.1967C65.4691 31.318 65.8284 31.3787 66.2204 31.3787ZM74.8466 24.2667V27.0247H75.6586C76.1533 27.0247 76.5453 26.9127 76.8346 26.6887C77.1333 26.4554 77.2826 26.0774 77.2826 25.5547C77.2826 25.06 77.1473 24.724 76.8766 24.5467C76.6059 24.36 76.2046 24.2667 75.6726 24.2667H74.8466ZM74.8466 28.2847V31.3367H75.8126C76.4193 31.3367 76.8906 31.22 77.2266 30.9867C77.5626 30.7534 77.7306 30.3474 77.7306 29.7687C77.7306 29.2274 77.5766 28.8447 77.2686 28.6207C76.9606 28.3967 76.4706 28.2847 75.7986 28.2847H74.8466ZM72.6626 22.9367H75.6446C76.8859 22.9367 77.8286 23.1187 78.4726 23.4827C79.1259 23.8467 79.4526 24.4674 79.4526 25.3447C79.4526 26.0167 79.2659 26.53 78.8926 26.8847C78.5286 27.23 78.0386 27.468 77.4226 27.5987C78.2439 27.692 78.8693 27.9207 79.2986 28.2847C79.7279 28.6394 79.9426 29.1667 79.9426 29.8667C79.9426 30.38 79.8353 30.814 79.6206 31.1687C79.4059 31.5234 79.1073 31.8127 78.7246 32.0367C78.3513 32.2607 77.9033 32.424 77.3806 32.5267C76.8673 32.62 76.3073 32.6667 75.7006 32.6667H72.6626V22.9367Z" fill="white"/>
+            <path fillRule="evenodd" clipRule="evenodd" d="M34.7894 87.9242C36.1775 87.0266 65.911 67.8307 66.5936 67.3885C67.2743 66.9474 67.3085 65.5944 66.5466 65.1066C65.7841 64.6188 64.3364 63.6963 63.7977 63.3425C63.2493 62.9837 62.263 62.7842 61.3482 63.3754C60.9684 63.6212 35.5574 80.0134 34.708 80.555C33.6915 81.2035 32.4332 81.2119 31.4202 80.5539C30.6201 80.0346 18 71.8073 18 71.8073V79.2428C21.2666 81.377 29.3888 86.6841 31.3573 87.9308C32.5321 88.675 33.6565 88.6567 34.7894 87.9242Z" fill="white"/>
+            <path fillRule="evenodd" clipRule="evenodd" d="M34.7894 102.781C36.1775 101.883 65.911 82.6871 66.5936 82.2449C67.2743 81.8041 67.3085 80.4508 66.5466 79.963C65.7841 79.4752 64.3364 78.5527 63.7977 78.1989C63.2493 77.8401 62.263 77.6406 61.3482 78.2318C60.9684 78.4775 35.5574 94.8698 34.708 95.4114C33.6915 96.0599 32.4332 96.0683 31.4202 95.4103C30.6201 94.891 18 86.6636 18 86.6636V94.0992C21.2666 96.2334 29.3888 101.54 31.3573 102.787C32.5321 103.531 33.6565 103.513 34.7894 102.781Z" fill="white"/>
+            <path fillRule="evenodd" clipRule="evenodd" d="M34.7894 117.637C36.1775 116.739 65.911 97.5435 66.5936 97.1014C67.2743 96.6605 67.3085 95.3073 66.5466 94.8195C65.7841 94.3317 64.3364 93.4092 63.7977 93.0554C63.2493 92.6965 62.263 92.497 61.3482 93.0882C60.9684 93.334 35.5574 109.726 34.708 110.268C33.6915 110.916 32.4332 110.925 31.4202 110.267C30.6201 109.747 18 101.52 18 101.52V108.956C21.2666 111.09 29.3888 116.397 31.3573 117.644C32.5321 118.388 33.6565 118.37 34.7894 117.637Z" fill="white"/>
+            <defs>
+              <filter id="filter0_d_795_261" x="0.832031" y="0" width="125.842" height="125.842" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                <feOffset/>
+                <feGaussianBlur stdDeviation="3"/>
+                <feComposite in2="hardAlpha" operator="out"/>
+                <feColorMatrix type="matrix" values="0 0 0 0 0.6 0 0 0 0 0.6 0 0 0 0 0.6 0 0 0 1 0"/>
+                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_795_261"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_795_261" result="shape"/>
+              </filter>
+            </defs>
+            {/* Число постов */}
+            <text x="64" y="75" textAnchor="middle" fontSize="38" fontWeight="bold" fill="#fff" dominantBaseline="middle">{count ?? ''}</text>
+          </svg>
+        </Box>
+        {/* Остальные карточки */}
+        {cards.slice(1, 2).map((card, idx) => (
+          <Box
+            key={card.label}
+            sx={{
+              width: '130px',
+              height: '120px',
+              background: card.bg,
+              borderRadius: 2,
+              boxShadow: 2,
+              marginLeft: card.ml,
+              marginRight: card.mr,
+              transition: 'box-shadow 0.4s, transform 0.4s, opacity 0.7s',
+              position: 'relative',
+              opacity: mounted ? 1 : 0,
+              transform: mounted ? 'translateY(0)' : 'translateY(40px)',
+              '&:hover': {
+                boxShadow: 8,
+                transform: 'translateY(-8px) scale(1.04)',
+              },
+            }}
+          >
+            <Typography
+              sx={{
+                position: 'absolute',
+                top: 14,
+                left: 15,
+                color: 'black',
+                fontWeight: 'bold',
+                fontSize: '20px',
+              }}
+            >
+              {card.label}
+            </Typography>
+            <Typography
+              sx={{
+                position: 'absolute',
+                bottom: 5,
+                right: 13,
+                fontWeight: 'Bold',
+                color: 'black',
+                fontSize: '40px',
+              }}
+            >
+              {card.value}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 2,
+          mt: 1.4,
+          mb: 2,
+          width: '100%',
+        }}
+      >
+        {cards.slice(2, 4).map((card, idx) => (
+          <Box
+            key={card.label}
+            sx={{
+              width: '130px',
+              height: '120px',
+              background: card.bg,
+              borderRadius: 2,
+              boxShadow: 2,
+              marginLeft: card.ml,
+              marginRight: card.mr,
+              transition: 'box-shadow 0.4s, transform 0.4s, opacity 0.7s',
+              position: 'relative',
+              opacity: mounted ? 1 : 0,
+              transform: mounted ? 'translateY(0)' : 'translateY(40px)',
+              '&:hover': {
+                boxShadow: 8,
+                transform: 'translateY(-8px) scale(1.04)',
+              },
+            }}
+          >
+            <Typography
+              sx={{
+                position: 'absolute',
+                top: 14,
+                left: 15,
+                color: 'black',
+                fontWeight: 'bold',
+                fontSize: '20px',
+              }}
+            >
+              {card.label}
+            </Typography>
+            <Typography
+              sx={{
+                position: 'absolute',
+                bottom: 5,
+                right: 13,
+                fontWeight: 'Bold',
+                color: 'black',
+                fontSize: '40px',
+              }}
+            >
+              {card.value}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+      
+
+      {/* Уведомления */}
+      <Box
+        sx={{
+          width: '250px',
+          minHeight: '200px',
+          background: 'linear-gradient(135deg, rgb(24, 15, 52), rgb(90, 1, 1))',
+          borderRadius: 2,
+          boxShadow: 2,
+          margin: '0 auto 0px auto',
+          transition: 'box-shadow 0.4s, transform 0.4s, opacity 0.7s',
+          position: 'relative',
+          opacity: mounted ? 1 : 0,
+          transform: mounted ? 'translateY(0)' : 'translateY(40px)',
+          '&:hover': {
+            boxShadow: 8,
+            transform: 'translateY(-8px) scale(1.04)',
+          },
+        }}
+      >
+        <Typography sx={{ color: 'white', fontWeight: 700, fontSize: 18, mb: 0, pt: 1.5, ml: 2 }}>Уведомления</Typography>
+        {noth === null ? (
+          <Typography sx={{ position: 'absolute', top: 16, left: 16, color: 'white', fontWeight: 'bold', fontSize: '16px' }}>Загрузка...</Typography>
+        ) : Array.isArray(noth) && noth.length === 0 ? (
+          <Typography sx={{ position: 'absolute', top: 16, left: 16, color: 'white', fontWeight: 'bold', fontSize: '16px' }}>Нет уведомлений</Typography>
+        ) : (
+          <Box sx={{  overflowY: 'auto', pr: 1 , ml:1,paddingTop:"10px" }}>
+            {noth.map((n, idx) => (
+              <Box key={idx} sx={{ mb: 1.5, p: 1.2, borderRadius: 2, background: 'rgba(255,255,255,0.07)' }}>
+                <Typography sx={{ fontWeight: 700, fontSize: 15, color: 'white' }}>{n.title}</Typography>
+                <Typography sx={{ color: 'rgba(255,255,255,0.8)', fontSize: 13 }}>{n.description}</Typography>
+                <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, mt: 0.5 }}>{n.date ? new Date(n.date).toLocaleString('ru-RU', { day: '2-digit', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit' }) : ''}</Typography>
+              </Box>
+            ))}
+          </Box>
+        )}
+      
+      </Box>
+        {noth && Array.isArray(noth) && noth.length > 0 && (
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<DeleteSweepIcon sx={{ fontSize: 18 }} />}
+            onClick={handleClearNotifications}
+            sx={{
+              marginTop:"10px",
+              marginLeft:"160px",
+              borderRadius: 2,
+              fontWeight: 500,
+              textTransform: 'none',
+              fontSize: 13,
+              minWidth: 'auto',
+              padding: '2px 10px',
+              background: 'rgba(255,255,255,0.08)',
+              borderColor: 'rgba(255,0,0,0.25)',
+              boxShadow: 'none',
+              opacity: 0.7,
+              '&:hover': {
+                background: 'rgba(255,0,0,0.08)',
+                opacity: 1
+              }
+            }}
+          >
+            Очистить
+          </Button>
+        )}
+   
+    </Box>
+  );
+});
+
+export default WidgetMain; 

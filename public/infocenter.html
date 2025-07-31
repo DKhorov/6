@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Информационный центр | AtomGlide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', 'Yandex Sans', Arial, Helvetica, sans-serif;
+      background: #f5f6fa;
+      color: #222;
+    }
+    .main-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin-top: 10px;
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+    .sidebar {
+      background: #fff;
+      border-radius: 20px 0 0 20px;
+      box-shadow: 0 4px 32px 0 rgba(31, 38, 135, 0.10);
+      padding: 32px 0 32px 0;
+      width: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 420px;
+    }
+    .avatar {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      margin-bottom: 24px;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.10);
+      background: #f5f6fa;
+    }
+    .tab {
+      width: 100%;
+      padding: 12px 0;
+      text-align: center;
+      font-size: 1.08rem;
+      font-weight: 500;
+      color: #1976d2;
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      border-left: 4px solid transparent;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .tab.active {
+      background: #f0f4ff;
+      color: #111;
+      border-left: 4px solid #1976d2;
+      font-weight: 700;
+    }
+    .content {
+      background: #fff;
+      border-radius: 0 20px 20px 0;
+      box-shadow: 0 4px 32px 0 rgba(31, 38, 135, 0.10);
+      padding: 36px 32px 32px 32px;
+      min-width: 320px;
+      max-width: 480px;
+      min-height: 420px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      animation: fadein 0.3s;
+    }
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: none; }
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 0 10px 0;
+      color: #1976d2;
+      letter-spacing: 1px;
+      text-align: left;
+    }
+    h2 {
+      font-size: 1.2rem;
+      color: #444;
+      margin-top: 32px;
+      margin-bottom: 10px;
+      font-weight: 700;
+      text-align: left;
+      width: 100%;
+    }
+    p, ul {
+      font-size: 1rem;
+      color: #333;
+      margin: 0 0 16px 0;
+      line-height: 1.7;
+      text-align: left;
+      width: 100%;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    .footer {
+      margin-top: 32px;
+      color: #888;
+      font-size: 0.95rem;
+      text-align: center;
+      width: 100%;
+    }
+    /* Удалены стили для .rules-table и .rules-table td */
+    @media (max-width: 900px) {
+      .main-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        padding-top: 10px;
+        max-height: 100dvh;
+        overflow-y: auto;
+        margin-left: 4px;
+        margin-right: 4px;
+        padding-left: 2vw;
+        padding-right: 2vw;
+        padding-bottom: 4px;
+      }
+      .sidebar, .content {
+        border-radius: 20px 20px 0 0;
+        min-width: unset;
+        max-width: unset;
+        width: 100%;
+      }
+      .sidebar {
+        flex-direction: row;
+        justify-content: center;
+        padding: 18px 0 8px 0;
+        min-height: unset;
+      }
+      .tab {
+        border-left: none;
+        border-bottom: 4px solid transparent;
+        margin: 0 8px;
+      }
+      .tab.active {
+        border-left: none;
+        border-bottom: 4px solid #1976d2;
+      }
+      .content {
+        border-radius: 0 0 20px 20px;
+        padding: 12px 2vw 12px 2vw;
+        min-height: unset;
+        max-height: 100dvh;
+        overflow-y: auto;
+        padding-bottom: 80px;
+        box-sizing: border-box;
+      }
+      .rules-table, .rules-table tr, .rules-table td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .rules-table td {
+        margin-bottom: 12px;
+      }
+    }
+    a {
+      color: #1976d2;
+      text-decoration: underline;
+      transition: color 0.2s;
+    }
+    a:hover {
+      color: #125ea2;
+    }
+  </style>
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="sidebar">
+      <img src="1.png" alt="Аватар AtomGlide" class="avatar" />
+      <button class="tab active" onclick="showTab(0)">Правила</button>
+      <button class="tab" onclick="showTab(1)">Политика</button>
+      <button class="tab" onclick="showTab(2)">Контакты</button>
+    </div>
+    <div class="content" id="tab-content">
+      <h1>Информационный центр</h1>
+      <h2>Правила использования</h2>
+      <table border="1">
+        <tr>
+          <td>Пользователь обязуется не нарушать законы РФ и других стран.</td>
+          <td>Запрещено размещать запрещённый контент, спам, вредоносные ссылки.</td>
+        </tr>
+        <tr>
+          <td>Уважайте других пользователей, не допускайте оскорблений и дискриминации.</td>
+          <td>Администрация может ограничить доступ без объяснения причин при нарушении правил.</td>
+        </tr>
+        <tr>
+          <td colspan="2">Использование сервиса означает согласие с этими правилами.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="footer">
+    © 2025 AtomGlide. Все права защищены.
+  </div>
+  <script>
+    const tabs = [
+      `<h1>Информационный центр</h1>
+      <h2>Правила использования</h2>
+      <table border="1">
+        <tr>
+          <td>Пользователь обязуется не нарушать законы РФ и других стран.</td>
+          <td>Запрещено размещать запрещённый контент, спам, вредоносные ссылки.</td>
+        </tr>
+        <tr>
+          <td>Уважайте других пользователей, не допускайте оскорблений и дискриминации.</td>
+          <td>Администрация может ограничить доступ без объяснения причин при нарушении правил.</td>
+        </tr>
+        <tr>
+          <td colspan="2">Использование сервиса означает согласие с этими правилами.</td>
+        </tr>
+      </table>`,
+      `<h1>Информационный центр</h1>
+      <h2>Политика конфиденциальности</h2>
+      <p>Мы уважаем вашу приватность. Ваши данные используются только для предоставления сервисов AtomGlide и не передаются третьим лицам без вашего согласия, за исключением случаев, предусмотренных законом.</p>
+      <p>Мы используем cookies для улучшения работы сайта. Используя сервис, вы соглашаетесь с нашей политикой.</p>`,
+      `<h1>Информационный центр</h1>
+      <h2>Контакты</h2>
+      <p>По вопросам и предложениям пишите на <a href="mailto:support@atomglide.ru">support@atomglide.ru</a> или в <a href="https://t.me/atomglide_support" target="_blank">Telegram</a>.</p>
+      <p>Адрес: г. Москва, ул. Примерная, д. 1</p>`
+    ];
+    function showTab(idx) {
+      document.querySelectorAll('.tab').forEach((el, i) => {
+        el.classList.toggle('active', i === idx);
+      });
+      document.getElementById('tab-content').innerHTML = tabs[idx];
+    }
+  </script>
+</body>
+</html> 

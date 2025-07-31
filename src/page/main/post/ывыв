@@ -1,0 +1,6 @@
+     <IconButton size="small" sx={{ width: '24px', height: '24px', color: 'rgb(78, 78, 78)', '&:hover': { backgroundColor: 'rgba(150, 150, 150, 0.1)' } }}>
+          <FiThumbsUp size={14} />
+        </IconButton>
+        <IconButton size="small" sx={{ width: '24px', height: '24px', color: 'rgb(78, 78, 78)', '&:hover': { backgroundColor: 'rgba(150, 150, 150, 0.1)' } }}>
+          <FiThumbsDown size={14} />
+        </IconButton>
