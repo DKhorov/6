@@ -153,16 +153,16 @@ export const customIcons = {
   },
   Pinned:{
     component: Pinned,
-    keyword: '[js]'
+    keyword: '[pinned]'
   },
     Atom:{
     component: Atom,
-    keyword: '[js]'
+    keyword: '[atom]'
   },
 
    Warning:{
     component: Warning,
-    keyword: '[js]'
+    keyword: '[waring]'
   },
   js: {
     component: JsIcon,
